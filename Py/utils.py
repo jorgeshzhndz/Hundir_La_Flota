@@ -1,0 +1,117 @@
+
+import numpy as np
+import random 
+
+#DEFINIR FUNCIONALIDADES (Crear tableros, barcos y colocarlos)
+def create_board(size = 10):
+    return np.full((size, size), '⬜')
+
+def create_ship (lenght, board):
+
+    size = 10
+
+    while True: #No sabemos cuantos intentos van a hacer falta 
+
+        orientation = random.choice(['H', 'V'])
+
+        # BARCO HORIZONTAL
+
+        if orientation == 'H':
+            row = np.random.randint(0,size) # No incluye la posicion 10 que quedaría fuera del tablero
+            column = np.random.randint (0, size - lenght + 1 ) 
+
+            '''En horizontal, limitamos la COLUMNA para que el barco no se salga por la derecha.
+            Ej: Si el tablero mide 10 y el barco mide 4, el inicio máximo permitido es la columna 6 (10-4 = 6)
+            NumPy excluye el último número en el rango, sumamos +1 (6 + 1 = 7) para que incluya el 6'''
+
+        # BARCO VERTICAL
+
+        else: 
+            row = np.random.randint (0, size - lenght + 1 ) 
+            column = np.random.randint(0,size)
+
+        # CREAR BARCO
+
+        ship = []
+
+        for i in range (lenght): #Va añadiendo las cordenadas en las que estará el barco
+            if orientation == 'H':
+                ship.append((row, column + i ))
+            else:
+                ship.append((row + i, column))
+
+        collision = False 
+        for row, column in ship:
+            if board[row, column] != '⬜':
+                collision = True 
+                break 
+        if not collision:
+             return ship
+
+
+def place_ship (ship, board):
+    for row, column in ship:
+        board[row, column] = '⛵'
+    return board 
+
+def create_fleet (board):
+
+    fleet_lenghts = [4,3,3,2,2,2]
+    fleet_list = []
+
+    for lenght in fleet_lenghts:
+        new_ship = create_ship(lenght, board)
+        board = place_ship(new_ship, board)
+        fleet_list.append(new_ship)
+        return board, fleet_list
+
+def shoot(box, board, fleet_list):
+    (row, column) = box 
+
+    if board[row, column] == '⛵':
+        board[row, column] = '❎'
+
+        shipwreck = True
+
+        for ship in fleet_list:
+            if (row, column) in ship:
+                for row_ship, column_ship in ship:
+                    if board[row_ship, column_ship] == '⛵':
+                        shipwreck = False
+
+        if shipwreck == False:
+            print(f"Disparo en ({row}, {column}): TOCADO 💣˖✷")
+        else:
+            print(f"Disparo en ({row}, {column}): 💥 TOCADO Y HUNDIDO!!!")
+
+    elif board[row, column] == '⬜':
+        board[row, column] = '💧'
+        print(f"Disparo en ({row}, {column}): AGUA ⋆｡ﾟ🌊｡")
+
+    else:
+        print(f"Ya has disparado en ({row}, {column})")
+
+    return board
+
+# ----VIDAS RESTANTES -------
+
+def  lives(board):
+    remaining_lives = np.sum(board == '⛵')
+    return remaining_lives
+  
+
+
+
+
+            
+
+
+
+
+
+
+
+
+    
+
+  
