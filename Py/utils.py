@@ -105,6 +105,9 @@ def shoot(board, fleet_list, box=None):
                     if board[row_ship, column_ship] == '⛵':
                         shipwreck = False
                         break
+                if shipwreck:
+                    for row_ship, column_ship in ship:
+                        board[row_ship,column_ship] = '💀'
                 break
 
         if shipwreck == False:
