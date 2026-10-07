@@ -2,7 +2,7 @@
 import numpy as np
 import random 
 
-#DEFINIR FUNCIONALIDADES (Crear tableros, barcos y colocarlos)
+#DEFINIR FUNCIONALIDADES DEL JUEGO (Crear tableros, barcos y colocarlos)
 def create_board(size = 10):
     return np.full((size, size), '⬜')
 
@@ -63,10 +63,36 @@ def create_fleet (board):
         new_ship = create_ship(lenght, board)
         board = place_ship(new_ship, board)
         fleet_list.append(new_ship)
-        return board, fleet_list
+    
+    return board, fleet_list
 
-def shoot(box, board, fleet_list):
-    (row, column) = box 
+def shoot(board, fleet_list, box=None):
+
+    if box is None: 
+        print("---------🔫 Es TU TURNO de disparar 🔫 -------")
+        while True:
+            try:
+                row = int(input("Escoge una fila del 0 al 9:"))
+                if 0 <= row <= 9:
+                    break
+                else:
+                    print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+            except:
+                if ValueError:
+                    print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+
+    while True:
+                try:
+                    column = int(input("Escoge una columna del 0 al 9:"))
+                    if 0 <= row <= 9:
+                        break
+                    else:
+                        print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+                except:
+                    if ValueError:
+                        print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+
+    box = (row, column)
 
     if board[row, column] == '⛵':
         board[row, column] = '❎'
@@ -98,7 +124,34 @@ def shoot(box, board, fleet_list):
 def  lives(board):
     remaining_lives = np.sum(board == '⛵')
     return remaining_lives
-  
+
+# ---- MASK DEL TABLERO ENEMIGO ----
+
+def hidden_board(board):
+    hidden = board.copy()
+    hidden[hidden =='⛵'] = '⬜'
+    return hidden 
+
+# --- INTERFAZ DE LA PARTIDA ----
+
+def print_boards(player_board, cpu_board):
+
+    cpu_hidden_board = hidden_board(cpu_board)
+    print("\n      --- TU TABLERO ---                  --- TABLERO ENEMIGO ---")
+    print("    0  1  2  3  4  5  6  7  8  9         0  1  2  3  4  5  6  7  8  9")
+    print("   ---------------------------         ---------------------------")
+
+    for r in range(10):
+        player_row = " ".join(player_board[r])
+        cpu_row = " ".join(cpu_hidden_board[r])
+        print(f"{r} | {player_row}       {r} | {cpu_row}")
+    print()
+
+
+
+
+
+
 
 
 
