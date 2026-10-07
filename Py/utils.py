@@ -69,7 +69,7 @@ def create_fleet (board):
 def shoot(board, fleet_list, box=None):
 
     if box is None: 
-        print("---------🔫 Es TU TURNO de disparar 🔫 -------")
+        print("\n---------🔫 Es TU TURNO de disparar 🔫 -------")
         while True:
             try:
                 row = int(input("Escoge una fila del 0 al 9:"))
@@ -77,14 +77,13 @@ def shoot(board, fleet_list, box=None):
                     break
                 else:
                     print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
-            except:
-                if ValueError:
-                    print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+            except ValueError:
+                print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
 
-    while True:
+        while True:
                 try:
                     column = int(input("Escoge una columna del 0 al 9:"))
-                    if 0 <= row <= 9:
+                    if 0 <= column <= 9:
                         break
                     else:
                         print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
@@ -92,7 +91,8 @@ def shoot(board, fleet_list, box=None):
                     if ValueError:
                         print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
 
-    box = (row, column)
+        box = (row, column )
+    row, column = box 
 
     if board[row, column] == '⛵':
         board[row, column] = '❎'
@@ -104,18 +104,20 @@ def shoot(board, fleet_list, box=None):
                 for row_ship, column_ship in ship:
                     if board[row_ship, column_ship] == '⛵':
                         shipwreck = False
+                        break
+                break
 
         if shipwreck == False:
-            print(f"Disparo en ({row}, {column}): TOCADO 💣˖✷")
+            print(f"\nDisparo en ({row}, {column}): TOCADO 💣˖✷")
         else:
-            print(f"Disparo en ({row}, {column}): 💥 TOCADO Y HUNDIDO!!!")
+            print(f"\nDisparo en ({row}, {column}): 💥 TOCADO Y HUNDIDO!!!")
 
     elif board[row, column] == '⬜':
         board[row, column] = '💧'
-        print(f"Disparo en ({row}, {column}): AGUA ⋆｡ﾟ🌊｡")
+        print(f"\nDisparo en ({row}, {column}): AGUA ⋆｡ﾟ🌊｡")
 
     else:
-        print(f"Ya has disparado en ({row}, {column})")
+        print(f"\nYa has disparado en ({row}, {column})")
 
     return board
 
@@ -138,13 +140,20 @@ def print_boards(player_board, cpu_board):
 
     cpu_hidden_board = hidden_board(cpu_board)
     print("\n      --- TU TABLERO ---                  --- TABLERO ENEMIGO ---")
-    print("    0  1  2  3  4  5  6  7  8  9         0  1  2  3  4  5  6  7  8  9")
-    print("   ---------------------------         ---------------------------")
+    print("    0  1  2  3  4  5  6  7  8  9            0  1  2  3  4  5  6  7  8  9")
+    print("   ---------------------------              ---------------------------")
 
     for r in range(10):
         player_row = " ".join(player_board[r])
         cpu_row = " ".join(cpu_hidden_board[r])
         print(f"{r} | {player_row}       {r} | {cpu_row}")
+
+    print("\n-------------------------------------------------------------------------")
+
+    lives_player = lives(player_board)
+    lives_cpu = lives(cpu_board)
+
+    print(f" MIS VIDAS ❤{lives_player}/16❤                                 VIDAS ENEMIGO ❤{lives_cpu}/16❤")
     print()
 
 
