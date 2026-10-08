@@ -50,9 +50,21 @@ def create_ship (lenght, board):
 
 
 def place_ship (ship, board):
+    size = 10 
+    boxes_around = [(-1, -1), (-1, 1), (1, -1), (1, 1)
+                    , (0,1), (1,0), (-1, 0), (0, -1)]
+
+    for row, col in ship: #Máscara para que no esten juntos los barcos 
+        for row_around, col_around in boxes_around:
+            row_mask, col_mask = row_around + row, col_around + col
+            if 0 <= row_mask < size and 0 <= col_mask < size:
+                if board[row_mask, col_mask] == '⬜':  
+                    board[row_mask, col_mask] = '⬛'
+
     for row, column in ship:
         board[row, column] = '⛵'
     return board 
+
 
 def create_fleet (board):
 
@@ -115,7 +127,7 @@ def shoot(board, fleet_list, box=None):
         else:
             print(f"\nDisparo en ({row}, {column}): 💥 TOCADO Y HUNDIDO!!!")
 
-    elif board[row, column] == '⬜':
+    elif board[row, column] in ('⬜', '⬛'):
         board[row, column] = '💧'
         print(f"\nDisparo en ({row}, {column}): AGUA ⋆｡ﾟ🌊｡")
 
@@ -132,22 +144,32 @@ def  lives(board):
 
 # ---- MASK DEL TABLERO ENEMIGO ----
 
-def hidden_board(board):
+def hidden_board_cpu(board):
     hidden = board.copy()
     hidden[hidden =='⛵'] = '⬜'
+    hidden[hidden == '⬛'] = '⬜'
+    return hidden 
+
+# ---- MASK DEL PLAYER ----
+
+def hidden_board_player(board):
+    hidden= board.copy()
+    hidden[hidden == '⬛'] = '⬜'
     return hidden 
 
 # --- INTERFAZ DE LA PARTIDA ----
 
 def print_boards(player_board, cpu_board):
 
-    cpu_hidden_board = hidden_board(cpu_board)
+    cpu_hidden_board = hidden_board_cpu(cpu_board)
+    player_hidden_board = hidden_board_player(player_board)
+
     print("\n      --- TU TABLERO ---                  --- TABLERO ENEMIGO ---")
     print("    0  1  2  3  4  5  6  7  8  9            0  1  2  3  4  5  6  7  8  9")
     print("   ---------------------------              ---------------------------")
 
     for r in range(10):
-        player_row = " ".join(player_board[r])
+        player_row = " ".join(player_hidden_board[r])
         cpu_row = " ".join(cpu_hidden_board[r])
         print(f"{r} | {player_row}       {r} | {cpu_row}")
 

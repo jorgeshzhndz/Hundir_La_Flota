@@ -2,7 +2,7 @@
 #Poner dificultad a la maquina. Si acierta al azar --> Tira a las adyacentes 
 #Crear la funcion jugar 
 
-from utils import create_ship, create_board, create_fleet, place_ship, shoot, lives, hidden_board, print_boards
+from utils import create_ship, create_board, create_fleet, place_ship, shoot, lives,hidden_board_cpu, hidden_board_player, print_boards
 import numpy as np
 import random
 from bot import cpu  
@@ -17,11 +17,11 @@ def play():
 
     bot = cpu()
 
-    dificulty = input("---------------- ⚔️ Escoge nivel de la CPU: Easy o Medium ⚔️ -----------\n").strip().lower()
+    dificulty = input("---------------- ⚔️ Escoge nivel de la CPU: Easy, Medium o Hard ⚔️ -----------\n").strip().lower()
 
-    while dificulty not in ["easy","medium"]:
+    while dificulty not in ["easy","medium", "hard"]:
         print("Introduce una dificultad válida")
-        dificulty = input("---- ⚔️ Escoge nivel de la CPU: Easy o Medium ⚔️ ----\n").strip().lower()
+        dificulty = input("---- ⚔️ Escoge nivel de la CPU: Easy, Medium o Hard ⚔️ ----\n").strip().lower()
     
 
     #Desplegamos las flotas
@@ -53,11 +53,11 @@ def play():
         
         print("\n -------TURNO de la CPU-------- 🤖")
 
-        if dificulty == "easy":
-            shot_box = bot.easy_cpu(player_board)
+        cpu_level = {"easy": bot.easy_cpu,
+                     "medium": bot.medium_cpu,
+                     "hard": bot.hard_cpu}
 
-        elif dificulty == "medium":
-            shot_box = bot.medium_cpu(player_board)
+        shot_box = cpu_level[dificulty](player_board)
 
         if shot_box is not None:
             player_board = shoot(player_board, player_fleet, box = shot_box)
