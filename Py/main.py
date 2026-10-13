@@ -2,16 +2,18 @@
 #Poner dificultad a la maquina. Si acierta al azar --> Tira a las adyacentes 
 #Crear la funcion jugar 
 
-from utils import create_ship, create_board, create_fleet, place_ship, shoot, lives,hidden_board_cpu, hidden_board_player, print_boards
+from utils import create_ship, create_board, create_fleet, place_ship, shoot, lives,hidden_board_cpu, hidden_board_player, print_boards, lost_board_cpu
 import numpy as np
 import random
+import time 
 from bot import cpu  
+from visual import slowprint
 
 def play():
 
-    print()
+    slowprint("")
 
-    print("⛴️ =================Bienvenidx a Hundir la flota ====================⛴️\n")
+    slowprint("⛴️ =================Bienvenidx a Hundir la flota ====================⛴️\n")
 
     #Ponemos en marcha la CPU
 
@@ -20,13 +22,13 @@ def play():
     dificulty = input("---------------- ⚔️ Escoge nivel de la CPU: Easy, Medium o Hard ⚔️ -----------\n").strip().lower()
 
     while dificulty not in ["easy","medium", "hard"]:
-        print("Introduce una dificultad válida")
+        slowprint("Introduce una dificultad válida")
         dificulty = input("---- ⚔️ Escoge nivel de la CPU: Easy, Medium o Hard ⚔️ ----\n").strip().lower()
     
 
     #Desplegamos las flotas
 
-    print("--------Prepárate, vamos a desplegar las flotas 𓇼☾𖤓ᨒ𓂃 𓈒𓏸﹏𓊝﹏----------")
+    slowprint("--------Prepárate, vamos a desplegar las flotas 𓇼☾𖤓ᨒ𓂃 𓈒𓏸﹏𓊝﹏----------")
 
     #Crear los tableros
     player_board = create_board()
@@ -41,17 +43,18 @@ def play():
     while game_over == False:
         print(f"\n=======================TURNO {turn}================================")
         print_boards(player_board, cpu_board)
-        print("\n TU TURNO de disparar 💣")
+        slowprint("\n TU TURNO de disparar 💣")
 
         cpu_board = shoot(cpu_board, cpu_fleet)
 
         if lives(cpu_board) == 0:
-            
-            print ("\n🏆🏆🏆 ENHORABUENA!! HAS HUNDIDO LA FLOTA ENEMIGA 🏆🏆🏆")
+
+            print_boards(player_board, cpu_board)
+            slowprint ("\n🏆🏆🏆 ENHORABUENA!! HAS HUNDIDO LA FLOTA ENEMIGA 🏆🏆🏆")
             break
         
         
-        print("\n -------TURNO de la CPU-------- 🤖")
+        slowprint("\n -------TURNO de la CPU-------- 🤖")
 
         cpu_level = {"easy": bot.easy_cpu,
                      "medium": bot.medium_cpu,
@@ -65,8 +68,22 @@ def play():
             print("La CPU ya no tiene más casillas a las que disparar")
 
         if lives(player_board) == 0:
-            
-            print(f"\n☠️ ¡HAS SIDO DERROTADO en el TURNO {turn}! Todos tus barcos se han hundido ☠️")
+
+            print_boards(player_board, cpu_board)
+            slowprint(f"\n☠️ ¡HAS SIDO DERROTADO en el TURNO {turn}! Todos tus barcos se han hundido ☠️")
+            slowprint(f"Revelando la posición de la flota enemiga...")
+            time.sleep(1.0)
+            cpu_lost_board = lost_board_cpu(cpu_board)
+
+            print("\n      --- POSICIONES DE LA CPU ---")
+            print("    0  1  2  3  4  5  6  7  8  9")
+            print("   ---------------------------")
+            for r in range(10):
+                cpu_row = " ".join(cpu_lost_board[r])
+                print(f"{r} | {cpu_row}")
+                time.sleep(0.12) 
+            print("   Suerte la próxima vez :P\n")
+
             game_over = True
             break
 

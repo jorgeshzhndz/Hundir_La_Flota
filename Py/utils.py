@@ -1,6 +1,7 @@
 
 import numpy as np
 import random 
+from visual import slowprint
 
 #DEFINIR FUNCIONALIDADES DEL JUEGO (Crear tableros, barcos y colocarlos)
 def create_board(size = 10):
@@ -88,9 +89,9 @@ def shoot(board, fleet_list, box=None):
                 if 0 <= row <= 9:
                     break
                 else:
-                    print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+                    slowprint("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
             except ValueError:
-                print("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
+                slowprint("⚠️ ERROR ⚠️  Introducir un número del 0 al 9")
 
         while True:
                 try:
@@ -123,16 +124,16 @@ def shoot(board, fleet_list, box=None):
                 break
 
         if shipwreck == False:
-            print(f"\nDisparo en ({row}, {column}): TOCADO 💣˖✷")
+            slowprint(f"\nDisparo en ({row}, {column}): TOCADO 💣˖✷")
         else:
-            print(f"\nDisparo en ({row}, {column}): 💥 TOCADO Y HUNDIDO!!!")
+            slowprint(f"\nDisparo en ({row}, {column}): 💥 TOCADO Y HUNDIDO!!!")
 
     elif board[row, column] in ('⬜', '⬛'):
         board[row, column] = '💧'
-        print(f"\nDisparo en ({row}, {column}): AGUA ⋆｡ﾟ🌊｡")
+        slowprint(f"\nDisparo en ({row}, {column}): AGUA ⋆｡ﾟ🌊｡")
 
     else:
-        print(f"\nYa has disparado en ({row}, {column})")
+        slowprint(f"\nYa has disparado en ({row}, {column})")
 
     return board
 
@@ -157,10 +158,26 @@ def hidden_board_player(board):
     hidden[hidden == '⬛'] = '⬜'
     return hidden 
 
+def lost_board_cpu(board):
+    hidden= board.copy()
+    hidden[hidden == '⬛'] = '⬜'
+    return hidden
+
 # --- INTERFAZ DE LA PARTIDA ----
 
 def print_boards(player_board, cpu_board):
+    import sys
+    import time
 
+    sys.stdout.write("\n📡 Escaneando tablero")
+    sys.stdout.flush()
+    for _ in range(3):
+        time.sleep(0.3)
+        sys.stdout.write(".")
+        sys.stdout.flush()
+
+    print("\n")
+    time.sleep(0.2)
     cpu_hidden_board = hidden_board_cpu(cpu_board)
     player_hidden_board = hidden_board_player(player_board)
 
@@ -172,6 +189,9 @@ def print_boards(player_board, cpu_board):
         player_row = " ".join(player_hidden_board[r])
         cpu_row = " ".join(cpu_hidden_board[r])
         print(f"{r} | {player_row}       {r} | {cpu_row}")
+
+        time.sleep(0.12)
+
 
     print("\n-------------------------------------------------------------------------")
 
