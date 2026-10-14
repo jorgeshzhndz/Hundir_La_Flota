@@ -59,8 +59,12 @@ def play():
         cpu_level = {"easy": bot.easy_cpu,
                      "medium": bot.medium_cpu,
                      "hard": bot.hard_cpu}
-
-        shot_box = cpu_level[dificulty](player_board)
+        #El bot solo debe ver el tablero oculto. Sino puede omitir las casillas negras
+        #Que hacen de mascara
+        
+        player_mask_board = hidden_board_player(player_board)
+        player_mask_board[player_mask_board == '⬛'] = '⬜'
+        shot_box = cpu_level[dificulty](player_mask_board)
 
         if shot_box is not None:
             player_board = shoot(player_board, player_fleet, box = shot_box)
