@@ -38,8 +38,8 @@ Un clásico juego de **Hundir la Flota** para la terminal de comandos desarrolla
 
 1. Clona este repositorio en tu equipo local:
    ```bash
-   git clone [https://github.com/tu-usuario/hundir-la-flota.git](https://github.com/tu-usuario/hundir-la-flota.git)
-   cd hundir-la-flota
+   git clone [https://github.com/jorgeshzhndz/Hundir_La_Flota.git](https://github.com/jorgeshzhndz/Hundir_La_Flota.git)
+   cd Hundir_La_Flota
    ```
 
 2. Instala la dependencia requerida (`numpy`):
