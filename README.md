@@ -52,10 +52,9 @@ Un clásico juego de **Hundir la Flota** para la terminal de comandos desarrolla
      ```bash
    pip install sys
    ```
-       ```bash
+   ```bash
    pip install time
    ```
-
 ---
 
 ## 🕹️ Cómo Jugar
