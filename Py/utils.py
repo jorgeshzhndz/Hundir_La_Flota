@@ -135,7 +135,7 @@ def shoot(board, fleet_list, box=None):
     else:
         slowprint(f"\nYa has disparado en ({row}, {column})")
 
-    return board
+In    return board
 
 # ----VIDAS RESTANTES -------
 
