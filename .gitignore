@@ -11,3 +11,6 @@ __pycache__/
 
 # Entornos virtuales
 venv/
+
+# Archivos secretos o personales
+secret_notes.txt
