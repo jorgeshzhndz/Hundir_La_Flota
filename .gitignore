@@ -8,3 +8,6 @@ __pycache__/
 # IGNORAR EXCLUSIVAMENTE POWERPOINT
 *.pptx
 ~$*.pptx
+
+# Entornos virtuales
+venv/
