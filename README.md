@@ -42,7 +42,7 @@ Un clásico juego de **Hundir la Flota** para la terminal de comandos desarrolla
    cd Hundir_La_Flota
    ```
 
-2. Instala las librerias requeridas (`numpy`):
+2. Instala las librerias requeridas:
    ```bash
    pip install numpy
    ```
